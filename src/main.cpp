@@ -5,8 +5,8 @@
 #include "MvnGenerator.h"
 #include "MvnRunner.h"
 
-#define CODE_INVALID	-1
-#define VERSION			"1.2"
+#define CODE_INVALID    -1
+#define VERSION         "1.2"
 
 // Changes the args to strings
 std::vector<std::string> Parse(int argc, char** argv) {
@@ -21,7 +21,7 @@ std::vector<std::string> Parse(int argc, char** argv) {
 // Returns CODE_INVALID if index not found
 int HasCommand(const std::vector<std::string>& args, const std::string& command, const std::string& deliminator = " ") {
     for (int i = 0; i < (int)(args.size()); i++) {
-		std::string arg = args[i].substr(0, args[i].find(deliminator));
+        std::string arg = args[i].substr(0, args[i].find(deliminator));
         if (arg.compare(command) == 0) {
             return i;
         }
@@ -35,13 +35,13 @@ void Version() {
     std::cout << "Can either generate a new maven project or run one\n";
     std::cout << "Allows quick start with basic maven project without needing\n";
     std::cout << "to look up the command for it\n";
-	std::cout << "\n";
+    std::cout << "\n";
 }
 
 // Print help menu
 void Help() {
     std::cout << "\n    Commands\n";
-	std::cout << "\n    Generation\n";
+    std::cout << "\n    Generation\n";
     std::cout << "-h            Prints this menu\n";
     std::cout << "-v            Prints the program version\n";
     std::cout << "-company=     Company name, set with arg after '='\n";
@@ -74,87 +74,87 @@ void ParseCommands(MvnGenerator& mvnGenerator, MvnRunner& mvnRunner, std::vector
         Help();
     }
 
-	// ----- Generation -----
+    // ----- Generation -----
 
-	// Generate
-	if ((index = HasCommand(args, "-g") != CODE_INVALID)) {
-		mvnGenerator.SetGenerate(true);
-	}
+    // Generate
+    if ((index = HasCommand(args, "-g") != CODE_INVALID)) {
+        mvnGenerator.SetGenerate(true);
+    }
 
-	// Company
-	if ((index = HasCommand(args, "-company", "=")) != CODE_INVALID) {
+    // Company
+    if ((index = HasCommand(args, "-company", "=")) != CODE_INVALID) {
         // Make substring with only user arg 
-		std::string arg = args[index];
-		arg = arg.substr(arg.find('=') + 1);
+        std::string arg = args[index];
+        arg = arg.substr(arg.find('=') + 1);
 
         // Fixes powershell parsing
         if (arg.find('.') > arg.length()) {
             arg += args[index + 1];
         }
 
-		mvnGenerator.SetCompany(arg);
+        mvnGenerator.SetCompany(arg);
     }
 
-	// Project name
-	if ((index = HasCommand(args, "-name", "=")) != CODE_INVALID) {
+    // Project name
+    if ((index = HasCommand(args, "-name", "=")) != CODE_INVALID) {
         // Make substring with only user arg
-		std::string arg = args[index];
-		arg = arg.substr(arg.find('=') + 1);
+        std::string arg = args[index];
+        arg = arg.substr(arg.find('=') + 1);
 
-		mvnGenerator.SetProjectName(arg);
+        mvnGenerator.SetProjectName(arg);
     }
-	// Archetype
-	if ((index = HasCommand(args, "-archetype", "=")) != CODE_INVALID) {
+    // Archetype
+    if ((index = HasCommand(args, "-archetype", "=")) != CODE_INVALID) {
         // Make substring with only user arg
-		std::string arg = args[index];
-		arg = arg.substr(arg.find('=') + 1);
+        std::string arg = args[index];
+        arg = arg.substr(arg.find('=') + 1);
 
-		mvnGenerator.SetArchetype(arg);
+        mvnGenerator.SetArchetype(arg);
     }
 
-	// ----- Running -----
+    // ----- Running -----
 
-	// Compile
-	if ((index = HasCommand(args, "-c")) != CODE_INVALID) {
+    // Compile
+    if ((index = HasCommand(args, "-c")) != CODE_INVALID) {
         // Determine 
-		if ((size_t)index < args.size() - 1) {
-			std::string mainMethod = args[index + 1];
-			mvnRunner.SetMainFile(mainMethod);
-		}
-		mvnRunner.SetRun(true);
+        if ((size_t)index < args.size() - 1) {
+            std::string mainMethod = args[index + 1];
+            mvnRunner.SetMainFile(mainMethod);
+        }
+        mvnRunner.SetRun(true);
     }
-	// Run
-	if ((index = HasCommand(args, "-r")) != CODE_INVALID) {
+    // Run
+    if ((index = HasCommand(args, "-r")) != CODE_INVALID) {
         // Determine 
-		if ((size_t)index < args.size() - 1) {
-			std::string mainMethod = args[index + 1];
-			mvnRunner.SetMainFile(mainMethod);
-		}
-		mvnRunner.SetRun(true);
+        if ((size_t)index < args.size() - 1) {
+            std::string mainMethod = args[index + 1];
+            mvnRunner.SetMainFile(mainMethod);
+        }
+        mvnRunner.SetRun(true);
     }
-	// Compile and Run
-	if ((index = HasCommand(args, "-cr")) != CODE_INVALID) {
+    // Compile and Run
+    if ((index = HasCommand(args, "-cr")) != CODE_INVALID) {
         // Determine 
-		if ((size_t)index < args.size() - 1) {
-			std::string mainMethod = args[index + 1];
-			mvnRunner.SetMainFile(mainMethod);
-		}
+        if ((size_t)index < args.size() - 1) {
+            std::string mainMethod = args[index + 1];
+            mvnRunner.SetMainFile(mainMethod);
+        }
         mvnRunner.SetCompile(true);
-		mvnRunner.SetRun(true);
+        mvnRunner.SetRun(true);
     }
 }
 
 int main(int argc, char** argv) {
-	auto args = Parse(argc, argv);
-	MvnGenerator mvnGenerator;
-	MvnRunner mvnRunner;
+    auto args = Parse(argc, argv);
+    MvnGenerator mvnGenerator;
+    MvnRunner mvnRunner;
 
-	ParseCommands(mvnGenerator, mvnRunner, args);
+    ParseCommands(mvnGenerator, mvnRunner, args);
 
     // Perform specified actions
     mvnGenerator.Generate();
     mvnRunner.Compile();
     mvnRunner.Run();
 
-	return 0;
+    return 0;
 }
