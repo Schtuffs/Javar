@@ -6,7 +6,7 @@
 #include "MvnRunner.h"
 
 #define CODE_INVALID    -1
-#define VERSION         "1.2"
+#define VERSION         "1.3"
 
 // Changes the args to strings
 std::vector<std::string> Parse(int argc, char** argv) {
@@ -64,7 +64,6 @@ void ParseCommands(MvnGenerator& mvnGenerator, MvnRunner& mvnRunner, std::vector
     int index = CODE_INVALID;
 
     // Version info
-    std::cout << "Starting\n";
     if ((index = HasCommand(args, "-v")) != CODE_INVALID) {
         Version();
     }
@@ -116,12 +115,7 @@ void ParseCommands(MvnGenerator& mvnGenerator, MvnRunner& mvnRunner, std::vector
 
     // Compile
     if ((index = HasCommand(args, "-c")) != CODE_INVALID) {
-        // Determine 
-        if ((size_t)index < args.size() - 1) {
-            std::string mainMethod = args[index + 1];
-            mvnRunner.SetMainFile(mainMethod);
-        }
-        mvnRunner.SetRun(true);
+        mvnRunner.SetCompile(true);
     }
     // Run
     if ((index = HasCommand(args, "-r")) != CODE_INVALID) {
